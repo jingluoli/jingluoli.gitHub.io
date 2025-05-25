@@ -1,0 +1,451 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>jingli's blog | jingli's blog</title><meta name="author" content="jingli"><meta name="copyright" content="jingli"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="智能指针是C++中用于自动管理动态分配内存的类模板，帮助防止内存泄露，并在适当的时候自动释放内存，  unique_ptr独占所有权的智能指针，同一时间只能有一个unique_ptr指向特定对象 特点： 1.不可复制，但可移动 2，离开作用域时自动释放内存 3.零额外开销（与原始指针大小相同） 使用场景： 1.独占资源所有权 2.工厂函数返回指针 3.作为类的成员变量，表示独占关系  shared">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jingli&#39;s blog">
+<meta property="og:url" content="http://example.com/2025/04/28/C++/index.html">
+<meta property="og:site_name" content="jingli&#39;s blog">
+<meta property="og:description" content="智能指针是C++中用于自动管理动态分配内存的类模板，帮助防止内存泄露，并在适当的时候自动释放内存，  unique_ptr独占所有权的智能指针，同一时间只能有一个unique_ptr指向特定对象 特点： 1.不可复制，但可移动 2，离开作用域时自动释放内存 3.零额外开销（与原始指针大小相同） 使用场景： 1.独占资源所有权 2.工厂函数返回指针 3.作为类的成员变量，表示独占关系  shared">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-04-28T07:55:58.637Z">
+<meta property="article:modified_time" content="2025-05-24T08:15:19.175Z">
+<meta property="article:author" content="jingli">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "url": "http://example.com/2025/04/28/C++/",
+  "image": "http://example.com/img/butterfly-icon.png",
+  "datePublished": "2025-04-28T07:55:58.637Z",
+  "dateModified": "2025-05-24T08:15:19.175Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "jingli",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/04/28/C++/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'jingli\'s blog',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">jingli's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">jingli's blog</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">无标题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-28T07:55:58.637Z" title="发表于 2025-04-28 15:55:58">2025-04-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-24T08:15:19.175Z" title="更新于 2025-05-24 16:15:19">2025-05-24</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="智能指针"><a href="#智能指针" class="headerlink" title="智能指针"></a>智能指针</h2><pre><code>是C++中用于自动管理动态分配内存的类模板，帮助防止内存泄露，并在适当的时候自动释放内存，
+</code></pre>
+<h3 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h3><pre><code>独占所有权的智能指针，同一时间只能有一个unique_ptr指向特定对象
+特点：
+1.不可复制，但可移动
+2，离开作用域时自动释放内存
+3.零额外开销（与原始指针大小相同）
+使用场景：
+1.独占资源所有权
+2.工厂函数返回指针
+3.作为类的成员变量，表示独占关系
+</code></pre>
+<h3 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h3><pre><code>共享所有权的智能指针，多个shared_ptr可以指向同一对象，使用引用计数管理
+特点：
+1.可以复制和移动
+2.引用计数为零时自动释放内存
+3.有少量额外开销（控制块）
+使用场景：
+1.共享资源所有权
+2.需要多个对象访问同一资源
+3.缓存系统
+</code></pre>
+<h3 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h3><pre><code>弱引用计数，不增加引用计数，用于解决shared_ptr的循坏引用问题
+特点：
+1.不增加引用计数
+2.必须从shared_ptr创建 
+3.用于观察对象而不影响其生命周期
+4.必须通过lock()方法转换为shared_ptr才能访问对象；如果对象已被删除，lock()返回空shared_ptr
+使用场景：
+1.打破循环引用
+2.观察者模式
+3.缓存系统（不延长对象生命周期）
+</code></pre>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><pre><code>1.优先使用make_unique和make_shared（更安全、更高效）
+2.不要混合使用原始指针和智能指针
+3.避免循环引用（使用weak_ptr）
+4.注意多线程环境下的线程安全问题
+5.对于数组，使用unique_ptr&lt;T[]&gt;或shared_ptr&lt;T[]&gt;
+</code></pre>
+<h3 id="智能指针线程安全问题"><a href="#智能指针线程安全问题" class="headerlink" title="智能指针线程安全问题"></a>智能指针线程安全问题</h3><pre><code>1.shared_ptr的线程安全性
+①引用计数的线程安全性
+引用计数操作是原子性的
+·不同shared_ptr实例（指向同一对象）的引用计数增减是线程安全的
+·多个线程可以安全地拷贝、赋值或重置指向同一对象的shared_ptr
+②同一shared_ptr实例的并发访问
+同一shared_ptr对象的并发性读写不是安全的，需要加锁保护
+③指向对象的线程安全性
+不保证其指向对象的线程安全，需要额外同步机制保护对象访问
+
+2.unique_ptr的线程安全性
+·不保证多线程环境下的安全性，不应该被多个线程访问
+·所有权可以在线程间安全地转移（std:move），但需要同步机制
+
+3.weak_ptr的线程安全性
+weak_ptr是shared_ptr的观察者
+·引用计数操作是线程安全的
+·对同一weak_ptr对象的并发访问需要外部同步
+·lock()操作是原子性的，可安全检查对象是否存在
+</code></pre>
+<h3 id="shared-ptr循环引用问题及weak-ptr解决方案"><a href="#shared-ptr循环引用问题及weak-ptr解决方案" class="headerlink" title="shared_ptr循环引用问题及weak_ptr解决方案"></a>shared_ptr循环引用问题及weak_ptr解决方案</h3><pre><code>1.循环引用产生的原因
+当两个或多个对象通过shared_ptr互相引用时，每个对象的引用计数永远不会降到0
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span>;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">A</span>()</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;A()&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	~<span class="built_in">A</span>()</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;~A()&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	shared_ptr&lt;B&gt; ptr;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">B</span>()</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;B()&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">	~<span class="built_in">B</span>()</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;~B()&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	shared_ptr&lt;A&gt; ptr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">auto</span> aaa = <span class="built_in">make_shared</span>&lt;A&gt;();</span><br><span class="line">	<span class="keyword">auto</span> bbb = <span class="built_in">make_shared</span>&lt;B&gt;();</span><br><span class="line">	shared_ptr&lt;A&gt;* pptrA = &amp;aaa;</span><br><span class="line">	shared_ptr&lt;B&gt;* pptrB = &amp;bbb;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;A:&quot;</span> &lt;&lt; pptrA-&gt;<span class="built_in">use_count</span>() &lt;&lt; endl;   <span class="comment">//引用计数 1</span></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;B:&quot;</span> &lt;&lt; pptrB-&gt;<span class="built_in">use_count</span>() &lt;&lt; endl;   <span class="comment">//引用计数 1</span></span><br><span class="line">	aaa.<span class="built_in">get</span>()-&gt;ptr = bbb;</span><br><span class="line">	bbb.<span class="built_in">get</span>()-&gt;ptr = aaa;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;A:&quot;</span> &lt;&lt; pptrA-&gt;<span class="built_in">use_count</span>() &lt;&lt; endl;   <span class="comment">//引用计数 2</span></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;B:&quot;</span> &lt;&lt; pptrB-&gt;<span class="built_in">use_count</span>() &lt;&lt; endl;   <span class="comment">//引用计数 </span></span><br><span class="line">	</span><br><span class="line">	aaa.<span class="built_in">reset</span>();</span><br><span class="line">	pptrA = &amp;(bbb-&gt;ptr);</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;A:&quot;</span> &lt;&lt; pptrA-&gt;<span class="built_in">use_count</span>() &lt;&lt; endl;   <span class="comment">//引用计数 1</span></span><br><span class="line">	bbb.<span class="built_in">reset</span>();</span><br><span class="line">	pptrB = &amp;(pptrA-&gt;<span class="built_in">get</span>()-&gt;ptr);</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;B:&quot;</span> &lt;&lt; pptrB-&gt;<span class="built_in">use_count</span>() &lt;&lt; endl;   <span class="comment">//引用计数 1</span></span><br><span class="line">	<span class="comment">//引用计数不为0，不释放指向的对象，即不调用析构函数</span></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+图片：Snipaste_2025-04-30_13-03-53.png 执行结果
+
+2.weak_ptr解决循坏引用的方案
+shared_ptr与weak_ptr共享控制块，主要包括：
+·强引用计数 //shared_ptr计数
+·弱引用计数 //weak_ptr计数
+·原始指针   //实际对象指针
+·删除器 //自定义删除器
+
+对象销毁条件：
+①强引用计数为0
+控制块释体条件：
+①强引用计数为0
+②弱引用计数为0
+</code></pre>
+<h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><pre><code>lambda表达式提供了匿名函数对象的定义方法
+</code></pre>
+<h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><pre><code><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//[capture](parameters) -&gt; return_type &#123; function_body &#125;</span><br><span class="line">//[捕获列表](参数列表)-&gt;返回值类型&#123;函数体&#125;</span><br><span class="line">auto sum = [](int a,int b)&#123; return a + b ;&#125;;</span><br><span class="line">std::cout &lt;&lt; sum(3,4);</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><pre><code>通常用于只需要使用一次的函数
+</code></pre>
+<h3 id="lambda表达式与函数的区别"><a href="#lambda表达式与函数的区别" class="headerlink" title="lambda表达式与函数的区别"></a>lambda表达式与函数的区别</h3><pre><code>1. 匿名性
+lambda表达式定义为匿名的，不需要函数名
+函数必须要有函数名
+2. 捕获列表
+lambda表达式有捕获列表，可以访问外部作用域的变量
+函数没有，不能直接访问外部作用域的变量，需要通过参数传递
+3. 类型推导
+lambda表达式自动推导函数返回值和参数类型
+函数需要显示指定
+</code></pre>
+<h3 id="lambda表达式值传递与引用传递"><a href="#lambda表达式值传递与引用传递" class="headerlink" title="lambda表达式值传递与引用传递"></a>lambda表达式值传递与引用传递</h3><pre><code>1. 值传递 [=] 或 [var]
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">auto</span> lambda_val = [x]() &#123; </span><br><span class="line">	<span class="comment">// x 是外部变量的副本</span></span><br><span class="line">	std::cout &lt;&lt; x;  <span class="comment">// 输出10</span></span><br><span class="line">	<span class="comment">// x++;  // 错误：默认值捕获是const的</span></span><br><span class="line">&#125;;</span><br><span class="line">x = <span class="number">20</span>;</span><br><span class="line"><span class="built_in">lambda_val</span>();  <span class="comment">// 仍然输出10（捕获的是最初的值）	</span></span><br></pre></td></tr></table></figure>
+
+2. 引用传递 [&amp;var]或[&amp;]
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> y = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">auto</span> lambda_ref = [&amp;y]() &#123;</span><br><span class="line">	<span class="comment">// y 是外部变量的引用</span></span><br><span class="line">	std::cout &lt;&lt; y;  <span class="comment">// 输出当前y的值</span></span><br><span class="line">	y++;  <span class="comment">// 可以修改外部变量</span></span><br><span class="line">&#125;;</span><br><span class="line">y = <span class="number">20</span>;</span><br><span class="line"><span class="built_in">lambda_ref</span>();  <span class="comment">// 输出20，且y变为21	</span></span><br></pre></td></tr></table></figure>
+
+3. 混合捕获
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">1</span>, b = <span class="number">2</span>, c = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">auto</span> lambda = [a, &amp;b, &amp;c]() &#123;</span><br><span class="line">	<span class="comment">// a值捕获，b和c引用捕获</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+4. 值传递与引用传递区别
+值传递在lambda定义时复制当前值，默认const，存在拷贝开销
+引用传递在访问时引用当前值，可以直接修改原变量，无拷贝开销
+
+5. 注意事项
+悬空引用风险:当函数return值定义为一个lambda表达式时，捕获函数中的临时变量，在return时临时变量会被销毁，存在未定义的行为。
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::function&lt;<span class="title">void</span><span class="params">()</span>&gt; <span class="title">create_lambda</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="type">int</span> local = <span class="number">42</span>;</span><br><span class="line">	<span class="keyword">return</span> [&amp;local]() &#123; std::cout &lt;&lt; local; &#125;;  <span class="comment">// 危险！</span></span><br><span class="line">&#125;  <span class="comment">// local离开作用域被销毁</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> bad_lambda = <span class="built_in">create_lambda</span>();</span><br><span class="line"><span class="built_in">bad_lambda</span>();  <span class="comment">// 未定义行为！</span></span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="左值和右值"><a href="#左值和右值" class="headerlink" title="左值和右值"></a>左值和右值</h2><pre><code>【左值】具有持久化状态的对象，例如变量、返回左值引用的函数调用
+【右值】临时对象或字面量（42,&quot;hello&quot;）、返回非引用类型的函数调用
+</code></pre>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><pre><code>1. 取地址
+左值能取地址，在内存中有确定的位置；右值不能取地址
+2. 名称
+左值通常有名称，右值通常没有名称
+3. 生命周期
+左值生命周期超出当前表达式，右值生命周期到当前表达式结束
+4. 表达式中的位置
+左值出现在赋值表达式的左边，右值出现在赋值表达式的右侧
+</code></pre>
+<h3 id="左值引用与右值引用"><a href="#左值引用与右值引用" class="headerlink" title="左值引用与右值引用"></a>左值引用与右值引用</h3><pre><code>1. 左值引用
+①基本特性
+·用单个&amp;表示：T&amp;
+·只能绑定到左值
+·本质上是对象的别名
+·可以修改被引用对象，除非是const T&amp;
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span>&amp; lref = a;</span><br><span class="line"></span><br><span class="line">lref = <span class="number">20</span>;</span><br><span class="line">cout &lt;&lt; a; <span class="comment">//输出20</span></span><br></pre></td></tr></table></figure>
+②用途
+·函数参数传递（避免拷贝）
+·函数返回引用（允许链式调用）
+·创建别名
+
+③const左值引用
+const T&amp;可以绑定到右值，常用于函数参数，既能接受左值也能接受右值
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> std::string&amp; str)</span></span>;</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;hello&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+2. 右值引用
+①基本特性
+·使用双&amp;&amp;表示：T&amp;&amp;
+·只能绑定到右值
+·支持移动语义
+·可以修改被引用的临时变量
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>&amp;&amp; rref = <span class="number">42</span>;</span><br><span class="line">rref = <span class="number">50</span>;</span><br><span class="line"></span><br><span class="line">cout &lt;&lt; rref; <span class="comment">//输出50</span></span><br></pre></td></tr></table></figure>
+
+②用途
+·实现移动语义（高效资源转移）
+·完美转发（保持参数原始值类别）
+·延长临时对象的生命周期
+</code></pre>
+<h3 id="移动语义"><a href="#移动语义" class="headerlink" title="移动语义"></a>移动语义</h3><pre><code>//TO-DO
+</code></pre>
+<h3 id="完美转发"><a href="#完美转发" class="headerlink" title="完美转发"></a>完美转发</h3><pre><code>1. 定义：指函数模板可以将自己的参数“完美”的转发给内部调用的其他函数中。
+完美：指不仅能准确的转发参数的值，还能保证被转发的参数左、右属性不变
+//TO-DO
+</code></pre>
+<h2 id="struct与class"><a href="#struct与class" class="headerlink" title="struct与class"></a>struct与class</h2><h3 id="区别-1"><a href="#区别-1" class="headerlink" title="区别"></a>区别</h3><pre><code>1. 默认访问权限和继承权限
+struct 默认都为public
+class  默认都为private
+2. 用法惯例
+struct通常用于简单的数据聚合
+class通常用于更复杂的对象，包含数据和方法
+3. 模板参数
+struct不可以使用模板参数
+class可以使用
+</code></pre>
+<h3 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h3><pre><code>功能是完全相同的
+</code></pre>
+<h3 id="struct替代class"><a href="#struct替代class" class="headerlink" title="struct替代class"></a>struct替代class</h3><pre><code>1. 适用场景
+·纯数据聚合，没有或很少行为
+·默认需要public访问或继承权限
+·C兼容性要求(C只有struct)
+
+2. 不推荐场景
+·有复杂行为（很多方法）
+·需要严格封装（大量私有成员）
+·使用 RAII 模式或需要显式控制构造/析构时
+
+注解：
+【RAII 模式】 Resource Acquisition Is Initialization，资源获取即初始化，在对象构造时获取资源，在对象析构时释放资源
+</code></pre>
+<h3 id="struct内存对齐计算"><a href="#struct内存对齐计算" class="headerlink" title="struct内存对齐计算"></a>struct内存对齐计算</h3><pre><code>基本对齐原则：
+1. 成员对齐原则：每个成员的偏移量必须是该成员类型大小的整数倍
+2. 结构体整体对齐：结构体总大小必须是最大成员类型大小的整数倍
+3. 成员排序顺序：成员在内存中的顺序与声明顺序一致
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">text</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a; <span class="comment">//4</span></span><br><span class="line">	<span class="type">short</span> b; <span class="comment">//2</span></span><br><span class="line">	<span class="type">float</span> f; <span class="comment">//4</span></span><br><span class="line">	<span class="type">char</span> c; <span class="comment">//1</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//结构体大小：4 + 4（补2） + 4 + 4（补3）= 16	</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">text</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> a; <span class="comment">//4</span></span><br><span class="line">	<span class="type">short</span> b; <span class="comment">//2</span></span><br><span class="line">	<span class="type">char</span> c; <span class="comment">//1</span></span><br><span class="line">	<span class="type">float</span> f; <span class="comment">//4</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//结构体大小：4 + 4（2+1补1）+ 4 = 12</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">text</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">double</span> d; <span class="comment">//8</span></span><br><span class="line">	<span class="type">int</span> a; <span class="comment">//4</span></span><br><span class="line">	<span class="type">short</span> b; <span class="comment">//2</span></span><br><span class="line">	<span class="type">char</span> c; <span class="comment">//1</span></span><br><span class="line">	<span class="type">float</span> f; <span class="comment">//4</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//结构体大小：8 + 4 + 4(2+1补1) + 4 + 4（补4）= 24</span></span><br><span class="line"><span class="comment">//最大类型大小为8，20不为8的倍数，需补充4，结果为24	</span></span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="堆与栈"><a href="#堆与栈" class="headerlink" title="堆与栈"></a>堆与栈</h2><h3 id="区别-2"><a href="#区别-2" class="headerlink" title="区别"></a>区别</h3><pre><code>1. 分配方式
+栈由编译器自动分配释放
+堆由程序员手动分配释放
+2. 管理方式
+栈是后进先出的线性结构
+堆是不连续的链表结构
+3. 分配速度
+栈：快速（只需要移动栈指针）
+堆：相对较慢（需要查找适合的内存块）
+4. 大小
+栈：较小（通常几MB）
+堆：较大（受限于系统可用的内存）
+5. 碎片问题
+栈：无内存碎片
+堆：可能产生内存碎片
+6. 访问速度
+栈：更快（局部性原理）
+堆：相对较慢
+7. 分配位置
+栈：函数调用时自动分配
+堆：程序运行时动态申请
+</code></pre>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><pre><code>1. 优先使用栈
+·小对象
+·生命周期与函数调用一致的对象
+·需要快速分配/释放的临时变量
+
+2. 必须使用堆
+·大对象（超过栈容量）
+·需要在函数间共享的对象
+·生命周期不确定的对象
+·需要动态调整大小的数据结构
+</code></pre>
+<h3 id="new-delete-与-malloc-free"><a href="#new-delete-与-malloc-free" class="headerlink" title="new&#x2F;delete 与 malloc&#x2F;free"></a>new&#x2F;delete 与 malloc&#x2F;free</h3><pre><code>区别：
+1. new/delete是C++运算符，malloc/free是C标准库函数
+2. 前者返回具体类型指针，后者返回 void* 需要强制转换
+3. 前者自动计算内存大小，后者需要手动计算
+4. 前者调用构造/析构函数，后者不调用
+5. 前者失败抛出bad_alloc异常，后者返回NULL
+6. 前者可重载，后者不可以
+7. 前者可以来自自由存储区（不一定是堆），后者总是来自堆
+</code></pre>
+<h2 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h2><h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><pre><code>实现多态的机制。基类定义虚函数，子类可以重写该函数。
+当子类重新定义父类的虚函数后，当父类的指针指向子类对象的地址时，父类指针根据赋给它的不同子类指针，动态的调用子类的函数不。而不是父类的函数。
+
+虚函数是动态联编，函数调用发生在运行阶段
+非虚函数是静态联编，效率比虚函数高（虚函数需要通过查找虚函数表）
+</code></pre>
+<h3 id="虚函数的底层机制"><a href="#虚函数的底层机制" class="headerlink" title="虚函数的底层机制"></a>虚函数的底层机制</h3><pre><code>1. 实现原理
+虚函数表 + 虚表指针
+2. 编译器处理虚函数的方法
+为每个类对象添加一个隐藏成员，隐藏成员中保存了一个指向函数地址的指针，称为[虚表指针]，这种数组称为[虚函数表]，即每一个类使用一个虚函数表，每个类对象用一个虚表指针，虚表1与虚函数表是一一对应的
+
+3. 派生类虚函数表构建
+① 拷贝基类的虚函数表，如果是多继承情况，虚表指针与虚表数量等于其直接继承的拥有虚函数的基类数量，存储顺序按照继承的顺序
+② 基类中未被派生类重写的虚函数，不变
+③ 基类中被派生类重写的虚函数，将原基类虚函数地址替换为派生类重写的虚函数地址
+④ 派生类新添加的虚函数，直接添加在后面
+
+图片：Snipaste_2025-05-13_15-20-22.png  虚函数表构建
+
+4. 虚函数使用后的变化
+① 对象将增加一个存储地址的空间（32位系统为4字节，64位系统为8字节）
+② 每个类编译器都创建一个虚函数地址表
+③ 对每个虚函数调用都需要增加在查找地址的操作
+</code></pre>
+<h3 id="虚函数与非虚函数的区别"><a href="#虚函数与非虚函数的区别" class="headerlink" title="虚函数与非虚函数的区别"></a>虚函数与非虚函数的区别</h3><pre><code>1. 绑定时间
+非虚函数在编译期，静态绑定（调用哪个函数由指针/引用的静态类型决定）
+虚函数在运行期，动态绑定（调用哪个函数由指针/引用指向的实际对象类型决定）
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">base</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vir_func</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;virtual function, this is base&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;normal function, this is base&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> : <span class="keyword">public</span> base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vir_func</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;virtual function, this is A&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;normal function, this is A&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span> : <span class="keyword">public</span> base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">vir_func</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;virtual function, this is B&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;normal function, this is B&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	base* ba = <span class="keyword">new</span> <span class="built_in">base</span>();</span><br><span class="line">	base* a = <span class="keyword">new</span> <span class="built_in">A</span>();</span><br><span class="line">	base* b = <span class="keyword">new</span> <span class="built_in">B</span>();</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;virtual function:&quot;</span> &lt;&lt; endl;</span><br><span class="line">	ba-&gt;<span class="built_in">vir_func</span>();</span><br><span class="line">	a-&gt;<span class="built_in">vir_func</span>();</span><br><span class="line">	b-&gt;<span class="built_in">vir_func</span>();</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;normal function:&quot;</span> &lt;&lt; endl;</span><br><span class="line">	ba-&gt;<span class="built_in">func</span>();</span><br><span class="line">	a-&gt;<span class="built_in">func</span>();</span><br><span class="line">	b-&gt;<span class="built_in">func</span>();</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;A* change to B*:&quot;</span> &lt;&lt; endl;</span><br><span class="line">	((B*)a)-&gt;<span class="built_in">func</span>();</span><br><span class="line">	((B*)a)-&gt;<span class="built_in">vir_func</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+总结：当使用类的指针调用成员函数时，普通函数由指针类型决定，而虚函数由指针指向的实际类型决定。
+图片：Snipaste_2025-05-24_15-16-50.png  代码执行结果
+2. 多态性
+非虚函数不支持
+虚函数支持
+
+3. 调用决定依据
+非虚函数：指针/引用的静态类型
+虚函数：指针/引用指向的实际对象类型
+
+4. 性能
+非虚函数性能更高。虚函数需要进行虚表查询
+
+5. 关键字
+虚函数需要用virtual修饰（基类），override（派生类可选）
+</code></pre>
+<h3 id="重写、重载、隐藏"><a href="#重写、重载、隐藏" class="headerlink" title="重写、重载、隐藏"></a>重写、重载、隐藏</h3><pre><code>1. 重载
+在同一个作用域内（如类内部），定义多个同名函数，但它们的参数列表不同（参数类型、数量或顺序不同）。返回值类型可以相同或不同。
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Calculator</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">	<span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;  <span class="comment">// 重载</span></span><br><span class="line">	<span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c)</span> </span>&#123; <span class="keyword">return</span> a + b + c; &#125; <span class="comment">// 重载</span></span><br><span class="line">&#125;;	</span><br></pre></td></tr></table></figure>
+
+2. 重写
+子类重新定义父类的虚函数（virtual），实现运行时多态。函数名、参数列表和返回值必须完全相同。
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Base::show()&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">show</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Derived::show()&quot;</span> &lt;&lt; endl; &#125;  <span class="comment">// 重写</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Base* obj = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">	obj-&gt;<span class="built_in">show</span>();  <span class="comment">// 输出 &quot;Derived::show()&quot;（动态绑定）</span></span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+
+3. 隐藏
+派生类定义与基类同名但不符合重写条件的函数时，隐藏基类所有同名函数
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Base::print()&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Base::print(int)&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Derived::print()&quot;</span> &lt;&lt; endl; &#125;  <span class="comment">// 隐藏基类所有print()</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Derived d;</span><br><span class="line">	d.<span class="built_in">print</span>();     <span class="comment">// 输出 &quot;Derived::print()&quot;</span></span><br><span class="line">	<span class="comment">// d.print(10); // 编译错误：基类print(int)被隐藏</span></span><br><span class="line">	d.Base::<span class="built_in">print</span>(<span class="number">10</span>); <span class="comment">// 显式调用基类版本（输出 &quot;Base::print(int)&quot;）</span></span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+
+4. 隐藏基类重载
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">E</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">(<span class="type">int</span>)</span> </span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">F</span> : <span class="keyword">public</span> E &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;&#125;  <span class="comment">// 隐藏E::test()和E::test(int)</span></span><br><span class="line">&#125;;	</span><br></pre></td></tr></table></figure>
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">jingli</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/04/28/C++/">http://example.com/2025/04/28/C++/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">jingli's blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/04/25/http/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2025/04/28/%E5%AE%B9%E5%99%A8/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">分类序列式容器定义：按线性顺序存储元素 1.vector 动态数组 动态扩容，push_back()时自动增长 支持随机访问 在尾部插入/删除高效，中间或头部插入/删除较慢 适用场景： 频繁随机访问，数据量动态变化但主要在尾部操作 2.deque 双端队列 支持O(1)头部和尾部插入/删除  push_front/push_back 随机访问比vector慢，仍为O(1) 内存不连续，由多个固定大小的块组成 适用场景： 频繁在头部和尾部插入/删除 比list更适合随机访问 3.list双向链表 任意位置插入/删除O(1)   push_front/insert 不支持随机访问，只能顺序遍历 额外内存开销（前后指针） 适用场景： 需要频繁在任意位置插入/删除 不需要随机访问 4.forward_list 单向链表 类似list，仅支持单向遍历 更省内存（仅存储next指针） 插入/删除O(1)，仅从前向后遍历   push_front 适用场景：只需要单向遍历且内存敏感的场景 5.array...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">jingli</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"><span class="toc-number">1.</span> <span class="toc-text">智能指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#unique-ptr"><span class="toc-number">1.1.</span> <span class="toc-text">unique_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shared-ptr"><span class="toc-number">1.2.</span> <span class="toc-text">shared_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#weak-ptr"><span class="toc-number">1.3.</span> <span class="toc-text">weak_ptr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.4.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="toc-number">1.5.</span> <span class="toc-text">智能指针线程安全问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#shared-ptr%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8%E9%97%AE%E9%A2%98%E5%8F%8Aweak-ptr%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.6.</span> <span class="toc-text">shared_ptr循环引用问题及weak_ptr解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">lambda表达式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">2.2.</span> <span class="toc-text">适用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E5%87%BD%E6%95%B0%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">2.3.</span> <span class="toc-text">lambda表达式与函数的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%80%BC%E4%BC%A0%E9%80%92%E4%B8%8E%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92"><span class="toc-number">2.4.</span> <span class="toc-text">lambda表达式值传递与引用传递</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A6%E5%80%BC%E5%92%8C%E5%8F%B3%E5%80%BC"><span class="toc-number">3.</span> <span class="toc-text">左值和右值</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BA%E5%88%AB"><span class="toc-number">3.1.</span> <span class="toc-text">区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A6%E5%80%BC%E5%BC%95%E7%94%A8%E4%B8%8E%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8"><span class="toc-number">3.2.</span> <span class="toc-text">左值引用与右值引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89"><span class="toc-number">3.3.</span> <span class="toc-text">移动语义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91"><span class="toc-number">3.4.</span> <span class="toc-text">完美转发</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#struct%E4%B8%8Eclass"><span class="toc-number">4.</span> <span class="toc-text">struct与class</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BA%E5%88%AB-1"><span class="toc-number">4.1.</span> <span class="toc-text">区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%90%8C%E7%82%B9"><span class="toc-number">4.2.</span> <span class="toc-text">相同点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struct%E6%9B%BF%E4%BB%A3class"><span class="toc-number">4.3.</span> <span class="toc-text">struct替代class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struct%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%E8%AE%A1%E7%AE%97"><span class="toc-number">4.4.</span> <span class="toc-text">struct内存对齐计算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E4%B8%8E%E6%A0%88"><span class="toc-number">5.</span> <span class="toc-text">堆与栈</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BA%E5%88%AB-2"><span class="toc-number">5.1.</span> <span class="toc-text">区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">5.2.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#new-delete-%E4%B8%8E-malloc-free"><span class="toc-number">5.3.</span> <span class="toc-text">new&#x2F;delete 与 malloc&#x2F;free</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0"><span class="toc-number">6.</span> <span class="toc-text">虚函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-number">6.1.</span> <span class="toc-text">作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%BA%95%E5%B1%82%E6%9C%BA%E5%88%B6"><span class="toc-number">6.2.</span> <span class="toc-text">虚函数的底层机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E5%87%BD%E6%95%B0%E4%B8%8E%E9%9D%9E%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">6.3.</span> <span class="toc-text">虚函数与非虚函数的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%86%99%E3%80%81%E9%87%8D%E8%BD%BD%E3%80%81%E9%9A%90%E8%97%8F"><span class="toc-number">6.4.</span> <span class="toc-text">重写、重载、隐藏</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" title="排序算法">排序算法</a><time datetime="2025-05-20T05:17:03.144Z" title="发表于 2025-05-20 13:17:03">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(1)/" title="设计模式">设计模式</a><time datetime="2025-05-20T03:08:11.952Z" title="发表于 2025-05-20 11:08:11">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构">数据结构</a><time datetime="2025-05-20T02:07:39.986Z" title="发表于 2025-05-20 10:07:39">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/15/UML%E7%B1%BB%E5%9B%BE/" title="UML类图">UML类图</a><time datetime="2025-05-15T04:15:55.955Z" title="发表于 2025-05-15 12:15:55">2025-05-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="无标题">无标题</a><time datetime="2025-05-06T02:00:40.335Z" title="发表于 2025-05-06 10:00:40">2025-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By jingli</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

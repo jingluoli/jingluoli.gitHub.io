@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>thread | jingli's blog</title><meta name="author" content="jingli"><meta name="copyright" content="jingli"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="线程安全指多线程环境下，程序或系统能够正确处理多个线程同时访问共享资源的情况，而不会导致数据不一致或其他不可预期的行为。  相关概念1.竟态条件：当多个线程访问共享数据并试图同时修改它时，最终结果取决于线程执行的顺序 2.临界区：访问共享资源的代码段，需要同步机制保护 3.原子性：操作不可分割，要么完全执行，要么完全不执行  实现线程安全的方法1. 互斥量(Mutex) 最基本的同步机制，用于保护">
+<meta property="og:type" content="article">
+<meta property="og:title" content="thread">
+<meta property="og:url" content="http://example.com/2025/04/30/thread/index.html">
+<meta property="og:site_name" content="jingli&#39;s blog">
+<meta property="og:description" content="线程安全指多线程环境下，程序或系统能够正确处理多个线程同时访问共享资源的情况，而不会导致数据不一致或其他不可预期的行为。  相关概念1.竟态条件：当多个线程访问共享数据并试图同时修改它时，最终结果取决于线程执行的顺序 2.临界区：访问共享资源的代码段，需要同步机制保护 3.原子性：操作不可分割，要么完全执行，要么完全不执行  实现线程安全的方法1. 互斥量(Mutex) 最基本的同步机制，用于保护">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-04-30T07:37:54.319Z">
+<meta property="article:modified_time" content="2025-05-12T02:23:33.773Z">
+<meta property="article:author" content="jingli">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "thread",
+  "url": "http://example.com/2025/04/30/thread/",
+  "image": "http://example.com/img/butterfly-icon.png",
+  "datePublished": "2025-04-30T07:37:54.319Z",
+  "dateModified": "2025-05-12T02:23:33.773Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "jingli",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/04/30/thread/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'thread',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">jingli's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">thread</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">thread</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-30T07:37:54.319Z" title="发表于 2025-04-30 15:37:54">2025-04-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-12T02:23:33.773Z" title="更新于 2025-05-12 10:23:33">2025-05-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><pre><code>指多线程环境下，程序或系统能够正确处理多个线程同时访问共享资源的情况，而不会导致数据不一致或其他不可预期的行为。
+</code></pre>
+<h3 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h3><pre><code>1.竟态条件：当多个线程访问共享数据并试图同时修改它时，最终结果取决于线程执行的顺序
+2.临界区：访问共享资源的代码段，需要同步机制保护
+3.原子性：操作不可分割，要么完全执行，要么完全不执行
+</code></pre>
+<h3 id="实现线程安全的方法"><a href="#实现线程安全的方法" class="headerlink" title="实现线程安全的方法"></a>实现线程安全的方法</h3><pre><code>1. 互斥量(Mutex)
+最基本的同步机制，用于保护共享数据
+未加锁
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> shared_data = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">addCount</span><span class="params">(<span class="type">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		shared_data++;</span><br><span class="line">		cout &lt;&lt;<span class="string">&quot;Thread&quot;</span>&lt;&lt; a &lt;&lt; <span class="string">&quot;:&quot;</span> &lt;&lt; shared_data &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::thread <span class="title">t1</span><span class="params">(addCount,<span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t2</span><span class="params">(addCount, <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">	t<span class="number">1.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">2.</span><span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+图片：Snipaste_2025-05-03_12-50-54.png   未加锁结果
+
+加互斥锁
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">std::mutex mtx;</span><br><span class="line"><span class="type">int</span> shared_data = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">addCount</span><span class="params">(<span class="type">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		mtx.<span class="built_in">lock</span>();</span><br><span class="line">		shared_data++;</span><br><span class="line">		cout &lt;&lt;<span class="string">&quot;Thread&quot;</span>&lt;&lt; a &lt;&lt; <span class="string">&quot;:&quot;</span> &lt;&lt; shared_data &lt;&lt; endl;</span><br><span class="line">		mtx.<span class="built_in">unlock</span>();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::thread <span class="title">t1</span><span class="params">(addCount,<span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t2</span><span class="params">(addCount, <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">	t<span class="number">1.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">2.</span><span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+图片：Snipaste_2025-05-03_12-53-26.png 加锁结果
+
+2. 条件变量
+用于线程间的通信，允许线程等待特定条件成立
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">std::condition_variable cv;</span><br><span class="line">std::mutex mtx;</span><br><span class="line"><span class="type">bool</span> ready = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">worker</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">	cv.<span class="built_in">wait</span>(lock, [] &#123; <span class="keyword">return</span> ready; &#125;);</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Worker thread is processing\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">producer</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::this_thread::<span class="built_in">sleep_for</span>(std::chrono::<span class="built_in">seconds</span>(<span class="number">1</span>));</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="function">std::lock_guard&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">		ready = <span class="literal">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cv.<span class="built_in">notify_one</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::thread <span class="title">t1</span><span class="params">(worker)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t2</span><span class="params">(producer)</span></span>;</span><br><span class="line"></span><br><span class="line">	t<span class="number">1.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">2.</span><span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+3. 原子操作
+定义：指在多线程或并发编程中不可分割的操作，这些操作要么完全执行，要么完全不执行，不会被其他线程的操作打断。
+对简单的数据类型，可以使用原子操作避免锁的开销
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;atomic&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">std::mutex mtx;</span><br><span class="line">atomic&lt;<span class="type">int</span>&gt; shared_data = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">addCount</span><span class="params">(<span class="type">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; ++i)</span><br><span class="line">	&#123;	</span><br><span class="line">		shared_data++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::thread <span class="title">t1</span><span class="params">(addCount, <span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t2</span><span class="params">(addCount, <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">	t<span class="number">1.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">2.</span><span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+
+4. 读写锁
+C++14引入共享互斥量，允许多个读线程同时访问
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;shared_mutex&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">std::shared_mutex smtx;</span><br><span class="line"><span class="type">int</span> cnt = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">reader</span><span class="params">(<span class="type">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::shared_lock&lt;std::shared_mutex&gt; <span class="title">lock</span><span class="params">(smtx)</span></span>;</span><br><span class="line">	cout &lt;&lt; cnt &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">writer</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::unique_lock&lt;std::shared_mutex&gt; <span class="title">lock</span><span class="params">(smtx)</span></span>;</span><br><span class="line">	cnt++;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Writer Updated value\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::thread <span class="title">t1</span><span class="params">(reader, <span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t2</span><span class="params">(writer)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t3</span><span class="params">(reader, <span class="number">3</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">	t<span class="number">1.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">2.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">3.</span><span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+
+5. 信号量
+C++20引入，vs编译需要将C++标准切换到C++20版本
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;semaphore&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function">std::counting_semaphore&lt;1&gt; <span class="title">sem</span><span class="params">(<span class="number">1</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">worker</span><span class="params">(<span class="type">int</span> a)</span> </span>&#123;</span><br><span class="line">	sem.<span class="built_in">acquire</span>();</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Worker&quot;</span> &lt;&lt; a &lt;&lt; <span class="string">&quot; got the semaphore\n&quot;</span>; <span class="comment">//先输出一条，等待信号量释放再输出一条</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">producer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	std::this_thread::<span class="built_in">sleep_for</span>(std::chrono::<span class="built_in">seconds</span>(<span class="number">10</span>));</span><br><span class="line">	sem.<span class="built_in">release</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::thread <span class="title">t1</span><span class="params">(worker, <span class="number">1</span>)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t2</span><span class="params">(worker,<span class="number">2</span>)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t3</span><span class="params">(producer)</span></span>;</span><br><span class="line"></span><br><span class="line">	t<span class="number">1.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">2.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">3.</span><span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+
+6. 屏障（Barrier）
+C++20引入了屏障，用于同步多个线程在某个点汇合
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;barrier&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function">std::barrier <span class="title">sync_point</span><span class="params">(<span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">worker</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Worker before barrier\n&quot;</span>;</span><br><span class="line">	sync_point.<span class="built_in">arrive_and_wait</span>();</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Worker After barrier\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">producer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Producer before barrier\n&quot;</span>;</span><br><span class="line">	std::this_thread::<span class="built_in">sleep_for</span>(std::chrono::<span class="built_in">seconds</span>(<span class="number">5</span>));  </span><br><span class="line">	sync_point.<span class="built_in">arrive_and_wait</span>();</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Producer After barrier\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::thread <span class="title">t1</span><span class="params">(worker)</span></span>;</span><br><span class="line">	<span class="function">std::thread <span class="title">t2</span><span class="params">(producer)</span></span>;</span><br><span class="line"></span><br><span class="line">	t<span class="number">1.</span><span class="built_in">join</span>();</span><br><span class="line">	t<span class="number">2.</span><span class="built_in">join</span>();  <span class="comment">//等待五秒后，worker和producer输出后面内容</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+</code></pre>
+<h2 id="windows-thread、std-thread、Qthread"><a href="#windows-thread、std-thread、Qthread" class="headerlink" title="windows thread、std::thread、Qthread"></a>windows thread、std::thread、Qthread</h2><h3 id="windwos-thread"><a href="#windwos-thread" class="headerlink" title="windwos thread"></a>windwos thread</h3><pre><code>windows API，操作系统级别的线程，提供最底层的线程控制(如优先级、安全属性等)
+1. 创建方式：
+CreateThread()
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HADNLE hTHread = <span class="built_in">CreateThread</span>(<span class="literal">NULL</span>,<span class="number">0</span>,ThreadFunc,<span class="literal">NULL</span>,<span class="number">0</span> , <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
+2. 启动方式：直接运行
+3. 线程同步
+waitForSingleObject、临界区、事件
+4. 线程通信
+共享内存、消息队列
+5. 生命周期
+手动管理 closeHandle()
+6. 性能与开销
+最底层，性能最优，但管理复杂
+</code></pre>
+<h3 id="std-thread"><a href="#std-thread" class="headerlink" title="std::thread"></a>std::thread</h3><pre><code>C++11标准库，跨平台的轻量级线程封装，基于RAII管理线程生命周期
+1. 构造函数
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::thread <span class="title">t</span><span class="params">([]&#123; <span class="comment">/*...*/</span>&#125;)</span></span></span><br><span class="line"><span class="function">t.<span class="title">join</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+2. 启动方式：start()
+3. 线程同步
+std::mutex、std::condition_variable
+4. 线程通信
+共享变量、std::future
+5. 生命周期
+join()或detach()
+6. 性能与开销
+轻量级、跨平台、适合通用多线程任务
+</code></pre>
+<h3 id="QTHread"><a href="#QTHread" class="headerlink" title="QTHread"></a>QTHread</h3><pre><code>Qt框架，高级线程管理器，与Qt信号槽机制深度集成，支持事件循环
+1.创建方式：
+继承或moveToThread
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Qthread *thread = <span class="keyword">new</span> Qthread;</span><br><span class="line">worker-&gt;<span class="built_in">moveToTHread</span>(thread);</span><br><span class="line">thread-&gt;<span class="built_in">start</span>();</span><br></pre></td></tr></table></figure>
+
+2. 启动方式： start()
+3. 线程同步
+QMutex、QWaitCondition
+4. 线程通信
+信号槽（跨线程安全）
+5. 自动清理
+deleteLater
+6.因事件循环和信号槽机制，有一定开销，但开发效率高
+</code></pre>
+<h2 id="线程间通信方式"><a href="#线程间通信方式" class="headerlink" title="线程间通信方式"></a>线程间通信方式</h2><h3 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h3><pre><code>直接读写进程内的共享变量或数据结构（如全局变量、堆内存）
+问题：需要通过同步机制避免竞态条件
+</code></pre>
+<h3 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h3><pre><code>1. 互斥锁(mutex)：保证同一时间仅一个线程访问共享资源
+2. 读写锁：允许多读单写
+3. 自旋锁：忙等待，适用于短时间阻塞
+</code></pre>
+<h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><pre><code>线程等待某个条件成立，另一个线程触发条件后唤醒等待者。常与互斥锁配合使用
+</code></pre>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><pre><code>计数器控制资源访问（如限制并发线程数）
+二元信号量可模拟互斥锁
+</code></pre>
+<h3 id="屏障（Barrier）"><a href="#屏障（Barrier）" class="headerlink" title="屏障（Barrier）"></a>屏障（Barrier）</h3><pre><code>同步多个线程的执行阶段，所有线程到达屏障点后才继续
+</code></pre>
+<h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><pre><code>生产者-消费者模型，通过队列传递消息（如C++de std：：queue+锁）
+</code></pre>
+<h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><pre><code>进程拥有独立地址的空间，通信需通过内核或共享存储介质，开销较大
+</code></pre>
+<h3 id="管道-Pipe"><a href="#管道-Pipe" class="headerlink" title="管道 Pipe"></a>管道 Pipe</h3><pre><code>1. 匿名管道：单向通信，父子进程间使用
+2. 有名管道：通过文件系统实现，无关进程可通信
+</code></pre>
+<h3 id="消息队列（Message-Queue）"><a href="#消息队列（Message-Queue）" class="headerlink" title="消息队列（Message Queue）"></a>消息队列（Message Queue）</h3><pre><code>内核维护的链表结构，进程通过标识符读写消息，支持优先级、异步通信
+</code></pre>
+<h3 id="共享内存（shared-Memory）"><a href="#共享内存（shared-Memory）" class="headerlink" title="共享内存（shared Memory）"></a>共享内存（shared Memory）</h3><pre><code>映射同一块物理内存到多个进程的地址空间，速度最快，需配合信号量等同步机制
+</code></pre>
+<h3 id="信号（Signal）"><a href="#信号（Signal）" class="headerlink" title="信号（Signal）"></a>信号（Signal）</h3><pre><code>内核通知进程异步事件，但信息量较小，可用于简单通知，非结构化数据
+</code></pre>
+<h3 id="套接字-Socket"><a href="#套接字-Socket" class="headerlink" title="套接字(Socket)"></a>套接字(Socket)</h3><pre><code>跨网络或本机通信（如TCP/UDP套接字），灵活性高，但开销较大
+</code></pre>
+<h3 id="文件-内存映射文件（Memory-Mapped-File）"><a href="#文件-内存映射文件（Memory-Mapped-File）" class="headerlink" title="文件&#x2F;内存映射文件（Memory-Mapped File）"></a>文件&#x2F;内存映射文件（Memory-Mapped File）</h3><pre><code>文件作为共享介质，或通过mmap将文件映射到内存
+</code></pre>
+<h3 id="RPC-Remote-Procedure-Call"><a href="#RPC-Remote-Procedure-Call" class="headerlink" title="RPC(Remote Procedure Call)"></a>RPC(Remote Procedure Call)</h3><pre><code>跨进程/网络的函数调用抽象（如gRPC）
+</code></pre>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><pre><code>多线程/多进程系统中一种常见的资源竞争问题，指两个或多个线程/进程因相互等待对方持有的资源而无线阻塞的状态。死锁会导程序挂起，无法继续执行。
+</code></pre>
+<h3 id="死锁产生的必要条件"><a href="#死锁产生的必要条件" class="headerlink" title="死锁产生的必要条件"></a>死锁产生的必要条件</h3><pre><code>1. 互斥条件：资源一次只能由一个线程或进程占用（锁，文件，打印机等）
+2. 占有并等待：线程/进程持有至少一个资源，并等待获取其他被占用的资源
+3. 非抢占条件：已经分配的资源不能被强制剥夺，必须由持有者主动释放
+4. 循环等待：存在一个循环等待链，如：线程A 持有资源1，等待资源2；线程B 持有资源2，等待资源1。
+</code></pre>
+<h3 id="死锁的解决方案"><a href="#死锁的解决方案" class="headerlink" title="死锁的解决方案"></a>死锁的解决方案</h3><pre><code>1. 预防死锁
+·破坏互斥条件：某些资源可共享（如只读文件），但多数资源（如锁）必须互斥
+·破坏占有并等待：要求线程一次性申请所有所需资源
+·破坏非抢占条件：允许抢占资源，但实现复杂
+·破坏循环等待：规定资源的线性申请顺序
+2. 避免死锁（运行时检测）
+·银行家算法：系统动态检查资源分配是否会导致死锁，仅允许安全状态下的请求
+·锁层次：定义锁的获取顺序，违反顺序则报错
+3. 检测与恢复
+·死锁检测：通过资源分配图（Resource Allocation Graph, RAG）检测环路。操作系统定期扫描进程等待关系。
+·恢复措施：终止进程（如强制结束一个死锁进程）。回滚（Rollback）到安全状态。
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">jingli</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/04/30/thread/">http://example.com/2025/04/30/thread/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">jingli's blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/04/29/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2025/05/05/QT/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">信号与槽用于对象间的通信，它是一种类型安全的回调机制，比传统的回调函数更灵活，且完全解耦了发送者和接收者  </div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">jingli</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-number">1.</span> <span class="toc-text">线程安全</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">相关概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">实现线程安全的方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#windows-thread%E3%80%81std-thread%E3%80%81Qthread"><span class="toc-number">2.</span> <span class="toc-text">windows thread、std::thread、Qthread</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#windwos-thread"><span class="toc-number">2.1.</span> <span class="toc-text">windwos thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#std-thread"><span class="toc-number">2.2.</span> <span class="toc-text">std::thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#QTHread"><span class="toc-number">2.3.</span> <span class="toc-text">QTHread</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">线程间通信方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">3.1.</span> <span class="toc-text">共享内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%81%E6%9C%BA%E5%88%B6"><span class="toc-number">3.2.</span> <span class="toc-text">锁机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F"><span class="toc-number">3.3.</span> <span class="toc-text">条件变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="toc-number">3.4.</span> <span class="toc-text">信号量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%8F%E9%9A%9C%EF%BC%88Barrier%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">屏障（Barrier）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">3.6.</span> <span class="toc-text">消息队列</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1"><span class="toc-number">4.</span> <span class="toc-text">进程间通信</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E9%81%93-Pipe"><span class="toc-number">4.1.</span> <span class="toc-text">管道 Pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%EF%BC%88Message-Queue%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">消息队列（Message Queue）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%EF%BC%88shared-Memory%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">共享内存（shared Memory）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%EF%BC%88Signal%EF%BC%89"><span class="toc-number">4.4.</span> <span class="toc-text">信号（Signal）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%97%E6%8E%A5%E5%AD%97-Socket"><span class="toc-number">4.5.</span> <span class="toc-text">套接字(Socket)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6-%E5%86%85%E5%AD%98%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%EF%BC%88Memory-Mapped-File%EF%BC%89"><span class="toc-number">4.6.</span> <span class="toc-text">文件&#x2F;内存映射文件（Memory-Mapped File）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RPC-Remote-Procedure-Call"><span class="toc-number">4.7.</span> <span class="toc-text">RPC(Remote Procedure Call)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%BB%E9%94%81"><span class="toc-number">5.</span> <span class="toc-text">死锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81%E4%BA%A7%E7%94%9F%E7%9A%84%E5%BF%85%E8%A6%81%E6%9D%A1%E4%BB%B6"><span class="toc-number">5.1.</span> <span class="toc-text">死锁产生的必要条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%BB%E9%94%81%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">5.2.</span> <span class="toc-text">死锁的解决方案</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" title="排序算法">排序算法</a><time datetime="2025-05-20T05:17:03.144Z" title="发表于 2025-05-20 13:17:03">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(1)/" title="设计模式">设计模式</a><time datetime="2025-05-20T03:08:11.952Z" title="发表于 2025-05-20 11:08:11">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构">数据结构</a><time datetime="2025-05-20T02:07:39.986Z" title="发表于 2025-05-20 10:07:39">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/15/UML%E7%B1%BB%E5%9B%BE/" title="UML类图">UML类图</a><time datetime="2025-05-15T04:15:55.955Z" title="发表于 2025-05-15 12:15:55">2025-05-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="无标题">无标题</a><time datetime="2025-05-06T02:00:40.335Z" title="发表于 2025-05-06 10:00:40">2025-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By jingli</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

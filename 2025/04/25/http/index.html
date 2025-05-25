@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>jingli's blog | jingli's blog</title><meta name="author" content="jingli"><meta name="copyright" content="jingli"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="http(超文本传输协议)概述互联网应用最广泛的一种网络协议，是一个客户端和服务端请求和应答的标准，用于从www服务器传输超文本到本地浏览器的传输协议，可以使浏览器更加高效，使网络传输减少。  名称详解协议1.协议必须要有两个或多个参与者，也就是”协“ 2.协议是对参与者的一种行为约定和规范，也就是”议“  传输1.http协议是一个”双向协议“，有两个最基本的参与者A和B，数据在A和B之间是双向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jingli&#39;s blog">
+<meta property="og:url" content="http://example.com/2025/04/25/http/index.html">
+<meta property="og:site_name" content="jingli&#39;s blog">
+<meta property="og:description" content="http(超文本传输协议)概述互联网应用最广泛的一种网络协议，是一个客户端和服务端请求和应答的标准，用于从www服务器传输超文本到本地浏览器的传输协议，可以使浏览器更加高效，使网络传输减少。  名称详解协议1.协议必须要有两个或多个参与者，也就是”协“ 2.协议是对参与者的一种行为约定和规范，也就是”议“  传输1.http协议是一个”双向协议“，有两个最基本的参与者A和B，数据在A和B之间是双向">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-04-25T01:43:07.946Z">
+<meta property="article:modified_time" content="2025-04-26T02:51:57.937Z">
+<meta property="article:author" content="jingli">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "url": "http://example.com/2025/04/25/http/",
+  "image": "http://example.com/img/butterfly-icon.png",
+  "datePublished": "2025-04-25T01:43:07.946Z",
+  "dateModified": "2025-04-26T02:51:57.937Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "jingli",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/04/25/http/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'jingli\'s blog',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">jingli's blog</span></a><a class="nav-page-title" href="/"><span class="site-name">jingli's blog</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">无标题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-25T01:43:07.946Z" title="发表于 2025-04-25 09:43:07">2025-04-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-26T02:51:57.937Z" title="更新于 2025-04-26 10:51:57">2025-04-26</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="http-超文本传输协议"><a href="#http-超文本传输协议" class="headerlink" title="http(超文本传输协议)"></a>http(超文本传输协议)</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><pre><code>互联网应用最广泛的一种网络协议，是一个客户端和服务端请求和应答的标准，用于从www服务器传输超文本到本地浏览器的传输协议，可以使浏览器更加高效，使网络传输减少。
+</code></pre>
+<h2 id="名称详解"><a href="#名称详解" class="headerlink" title="名称详解"></a>名称详解</h2><h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><pre><code>1.协议必须要有两个或多个参与者，也就是”协“
+2.协议是对参与者的一种行为约定和规范，也就是”议“
+</code></pre>
+<h3 id="传输"><a href="#传输" class="headerlink" title="传输"></a>传输</h3><pre><code>1.http协议是一个”双向协议“，有两个最基本的参与者A和B，数据在A和B之间是双向流动的，通常把发起传输动作的叫请求方，后接到传输的叫做应答方或响应方
+2.数据虽然在A和B之间传输，但没有限制只有A和B这两个角色，允许中间有”中转“或”接力“，只要不影响最基本的数据传输，可以添加任意额外功能优化传输过程，例如安全认证、数据压缩、编码转换等等
+</code></pre>
+<h3 id="超文本"><a href="#超文本" class="headerlink" title="超文本"></a>超文本</h3><pre><code>1.所谓”文本“，指完整的、有意义的字符文字，可以被浏览器、服务器等上层应用程序处理，而并非TCP/UDP这些底层协议里被切的杂乱无章的二进制包
+2.所谓”超文本“，是文字、图片、音频和视频等的混合体，最关键含有”超链接“，能够从一个”超文本“跳跃到另一个”超文本“，例如，HTML
+</code></pre>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><pre><code>HTTP是一个在计算机世界里专门在两点之间传输文字、图片、音频、视频等超文本数据的约定和规范
+	
+</code></pre>
+<h2 id="发展历程"><a href="#发展历程" class="headerlink" title="发展历程"></a>发展历程</h2><h3 id="http-0-9"><a href="#http-0-9" class="headerlink" title="http&#x2F;0.9"></a>http&#x2F;0.9</h3><pre><code>1.作用：传输超文本内容HTML，协议定义了客户端发起请求、服务端响应请求的通信模式。
+2.请求：GET + 请求的文件路径
+3.返回：一个以ASCII字符流编码的HTML文档
+4.意义：充分验证了WEb服务的可行性
+5.弊端：只能传输文本内容
+图片：Snipaste_2025-04-25_10-29-51.png HTTP/0.9 通信示意图
+</code></pre>
+<h3 id="http-1-0"><a href="#http-1-0" class="headerlink" title="http&#x2F;1.0"></a>http&#x2F;1.0</h3><pre><code>1.新增特性
+·增加HEAD、POST等新方法
+·增加响应状态码，标记可能的错误原因
+·引入协议版本号概念
+·引入HTTP Header的概念，让HTTP处理请求和响应更加灵活
+·传输的数据不在局限于文本
+2.增加头部设定，内容以键值对的形式设置
+·Accept 浏览器可接受的文件类型
+·Content-Type 服务端返回的文件类型
+3.弊端：每次通信都需要经历建立连接、传输数据和断开连接三个阶段，一个页面引用较多外部文件会增加大量网络开销。
+图片：Snipaste_2025-04-25_11-00-43.png HTTP/1.0 通信示意图
+</code></pre>
+<h3 id="http-1-1"><a href="#http-1-1" class="headerlink" title="http&#x2F;1.1"></a>http&#x2F;1.1</h3><pre><code>1.新增特性
+·长连接(Connection: Kepp-alive):引入TCP连接复用，即一个TCP默认不关闭，可以被多个请求复用
+·并发连接：对一个域名的请求允许分配多个长连接(缓解长连接中的【队头阻塞】问题)
+·引入管道机制，一个TCP连接，可以同时发送多个请求。（响应的顺序必须和请求的顺序一致，不常用）
+·增加PUT、DELETE、OPTIONS、PATCH等新方法
+·新增缓存字段 cache-control E-tag
+·请求头引入range字段，支持断点续传
+·允许响应数据分块（chunked）,利于传输大文件
+·强制要求Host头，让互联网主机托管成为可能
+2.HTTP/1.1是一个”正式的标准“
+3.弊端
+·【队头阻塞】：使用长连接时，一个连接中同一时刻只能处理一个请求。当前的请求没有结束之前，其他的请求只能处于阻塞状态
+·浏览器为了减轻服务器压力，限制同一个域名下的HTTP连接数，即6~8个
+图片：Snipaste_2025-04-25_11-11-30.png HTTP/1.1 通信示意图
+</code></pre>
+<h3 id="http2"><a href="#http2" class="headerlink" title="http2"></a>http2</h3><pre><code>1.【多路复用】；利用一个连接来发送多个请求的方式称为多路复用，每一条路都被称为一个stream流
+2.改动
+·数据通过二进制协议传输，不再是纯文本。默认不再使用ASCII编码传输，改为二进制数据，提升传输效率。客户端在发送请求数据时会将每个请求的内容封装成不同的带有编号的二进制帧（frame），然后将这些帧同时发送给服务端。服务端接收到数据后，会将相同编号的帧合并为完整的请求信息。
+ 有了二进制分帧后，同一个域，客户端只需要与服务端建立一个连接即可完成通信需求。
+·多路复用，废弃1.1中的管道
+·使用专用算法压缩头部，减少数据传输量
+·设置数据帧的优先级，让服务器优先处理某些请求
+·允许服务器主动向客户端推送数据
+·头部字段全部改为小写；引入伪头部的概念，出现在头部字段之前，以冒号开头
+·增加安全性，要求加密通信
+3.弊端：普及率比较低
+图片：Snipaste_2025-04-25_13-06-11.png HTTP/2 通信示意图
+</code></pre>
+<h3 id="http3"><a href="#http3" class="headerlink" title="http3"></a>http3</h3><pre><code>HTTP over QUIC
+1.特性
+·基于QUIC协议（基于UDP的传输协议），取消传统的TCP，减少了连接建立的延迟，并解决了【队头阻塞】的问题
+·0-RTT快速连接：首次连接需1-RTT，后续连接可实现0-RTT（零往返时间），显著提升访问速度
+·多路复用改进：每个数据流独立传输，丢包不会影响其他流
+·连接迁移能力：使用Connection ID而非IP+端口标识连接，网络切换时仍保持会话
+·强制加密：默认集成TLS 1.3， 所有传输层元数据均加密，提升隐私性
+·纠错前向:部分丢包可通过融入数据回复，减少重传延迟
+2.弊端
+·UDP兼容性：部分防火墙或企业网可能拦截/限速UDP流量
+·老旧设备兼容性：需要客户端和服务端同时支持QUIC，旧设备可能无法使用
+3.适用：高延迟、移动网络和不稳定环境
+</code></pre>
+<h2 id="http-1-0与http-1-1区别"><a href="#http-1-0与http-1-1区别" class="headerlink" title="http&#x2F;1.0与http&#x2F;1.1区别"></a>http&#x2F;1.0与http&#x2F;1.1区别</h2><h3 id="长连接"><a href="#长连接" class="headerlink" title="长连接"></a>长连接</h3><pre><code>1.HTTP/1.1支持长连接和请求的流水线操作；
+2.HTTP/1.0默认使用短连接，每次请求需重新建立TCP连接，资源消耗较大；
+【长连接】：指不再需要每次请求都重新建立一次连接
+【请求的流水线操作】：指客户端在收到HTTP的响应报文之前可以先发送新的请求报文。不支持流水线操作需要等收到HTTP响应报文后才能继续发送新的请求报文。
+</code></pre>
+<h3 id="缓存处理"><a href="#缓存处理" class="headerlink" title="缓存处理"></a>缓存处理</h3><pre><code>1.HTTP/1.0主要使用header中的If-Modified-Since，Expires作为缓存判断的标准
+2.HTTp/1.1引入Entity tag, If-Modified-Since，If-Match等更多的缓存头来控制缓存策略
+</code></pre>
+<h3 id="错误码"><a href="#错误码" class="headerlink" title="错误码"></a>错误码</h3><pre><code>HTTP/1.1 新增24个错误状态响应码
+</code></pre>
+<h3 id="HOST域"><a href="#HOST域" class="headerlink" title="HOST域"></a>HOST域</h3><pre><code>1.HTTP/1.0中认为每台服务器都会绑定唯一的IP地址，请求URL中没有传递主机名
+2.一台服务器可能存在多个虚拟机，它们共享一个IP地址，所以HTTP/1.1中请求消息和响应消息都应该支持HOST域
+</code></pre>
+<h3 id="带宽优化及网络连接使用"><a href="#带宽优化及网络连接使用" class="headerlink" title="带宽优化及网络连接使用"></a>带宽优化及网络连接使用</h3><pre><code>1.HTTP/1.0中会存在浪费带宽的现象，主要因为不支持断点续传功能，客户端只需要某对象的一部分，服务端却将整个对象传了过来。
+2.HTTP/1.1中请求头引入range头域，支持请求资源的某一部分，返回状态码206
+</code></pre>
+<h2 id="HTTP-1-x与HTTP-2区别"><a href="#HTTP-1-x与HTTP-2区别" class="headerlink" title="HTTP 1.x与HTTP 2区别"></a>HTTP 1.x与HTTP 2区别</h2><h3 id="新的二进制格式"><a href="#新的二进制格式" class="headerlink" title="新的二进制格式"></a>新的二进制格式</h3><pre><code>1.HTTP 1.x解析基于文本
+2.HTTP2.0采用二进制，实现方便，健壮性更好
+</code></pre>
+<h3 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h3><pre><code>hTTP 2中每一个request对应一个id，一个连接上可以有多个request，每个连接的request可以随机混在一起，接收方可以根据request归属到各自不同的服务端请求里
+</code></pre>
+<h3 id="header压缩"><a href="#header压缩" class="headerlink" title="header压缩"></a>header压缩</h3><pre><code>1.在HTTP 1.x中header携带大量信息，每次都需要重新发送
+2.HTTP 2采用编码的方式减小了header的大小，同时通信双方各自缓存一份header fields表，避免header的重复传输
+</code></pre>
+<h3 id="服务端推送"><a href="#服务端推送" class="headerlink" title="服务端推送"></a>服务端推送</h3><pre><code>HTTP 2中客户端在请求一个资源时，会把相关资源一起发送给客户端，客户端不需要再次发起请求
+</code></pre>
+<h2 id="HTTP状态码"><a href="#HTTP状态码" class="headerlink" title="HTTP状态码"></a>HTTP状态码</h2><h3 id="1xx"><a href="#1xx" class="headerlink" title="1xx"></a>1xx</h3><pre><code>提示信息，表示目前是协议处理的中间状态，还需要后续的操作
+</code></pre>
+<h3 id="2xx"><a href="#2xx" class="headerlink" title="2xx"></a>2xx</h3><pre><code>成功，报文已接收到并被正确处理
+1.200// OK，表示一切正常，如果非HEAD请求，服务器返回的响应头会有body数据
+2.204// No Content，与200 OK基本相同，但响应头没有body数据
+3.206// Partial Content，应用于HTTP分块下载或断点续传，表示响应返回的body数据并不是资源的全部，而是其中一部分，也是服务器处理成功的状态
+</code></pre>
+<h3 id="3XX"><a href="#3XX" class="headerlink" title="3XX"></a>3XX</h3><pre><code>重定向，资源位置发生变动，需要客户端使用新的URL重新发送请求获取资源
+1.301//永久重定向，说明请求的资源已经不存在了，需要改用新的URL在再次访问
+2.302//临时重定向，资源还在，暂时需要使用另一个URL来访问
+3.304//不具有跳转含义，表示资源未修改，重定向已存在的缓冲文件，也称缓存重定向，用于缓存控制
+</code></pre>
+<h3 id="4xx"><a href="#4xx" class="headerlink" title="4xx"></a>4xx</h3><pre><code>客户端错误，请求报文有误，服务器无法处理
+1.400//请求报文有错误，笼统的错误
+2.403//服务器禁止访问资源，并非客户端请求出错
+3.404//请求的资源在服务器上不存在或未找到
+</code></pre>
+<h3 id="5xx"><a href="#5xx" class="headerlink" title="5xx"></a>5xx</h3><pre><code>服务器错误，服务器在处理请求时内部发生错误
+1.500//笼统的错误码，不知道具体错误原因
+2.501//表示客户端请求的功能还不支持
+3.502//服务器作为网关或代理时返回的错误码，表示服务器自身工作正常，访问后端服务器发生错误
+4.503//服务器当前很忙，暂时无法响应
+</code></pre>
+<h2 id="HTTP建立和断开连接"><a href="#HTTP建立和断开连接" class="headerlink" title="HTTP建立和断开连接"></a>HTTP建立和断开连接</h2><h3 id="建立连接"><a href="#建立连接" class="headerlink" title="建立连接"></a>建立连接</h3><pre><code>1.通过DNS将域名转换为IP地址
+2.建立TCP连接
+3.发起HTTP请求
+4.目标服务器接收到HTTP请求并处理
+5.目标服务器向客户端发回HTTP响应
+6.客户端接收并处理响应
+【往返时延（RTT, Round-Trip Time）】：从发送端发送数据开始，到发送端收到来自接收端的确认，总共经历的时延
+图片：Snipaste_2025-04-25_15-23-41.png HTTP建立连接
+</code></pre>
+<h3 id="断开连接"><a href="#断开连接" class="headerlink" title="断开连接"></a>断开连接</h3><pre><code>所有HTTP客户端、服务器都可以在任意时刻关闭TCP连接。通常会在一条报文结束时关闭连接，出错时也可能在首部行中间或任意位置关闭连接。
+</code></pre>
+<h2 id="HTTP的请求与响应"><a href="#HTTP的请求与响应" class="headerlink" title="HTTP的请求与响应"></a>HTTP的请求与响应</h2><h3 id="HTTP常见请求方式"><a href="#HTTP常见请求方式" class="headerlink" title="HTTP常见请求方式"></a>HTTP常见请求方式</h3><pre><code>1.GET：向服务器获取资源，查询一般使用GET
+2.POST：向服务器提交请求字段，多次执行会导致多条数据被创建
+3.PUT：修改指定URL的资源，若资源不存在，则创建，修改操作一般使用PUT，多次执行覆盖前面的数据
+4.PATCH：局部修改URL所在的资源数据，对PUT的补充
+5.DELETE：删除指定URL的资源
+6.HEAD：获取响应报文的首部，即URL资源的头部
+7.OPTIONS：询问服务器支持哪些方法，响应头返回：ALLOW：GET、POST、HEAD
+8.TRACE：追踪路径，用于测试或诊断，在请求头中Max-Forwards字段设置数字，每经过一个服务器该数字就减1，到0时直接返回，一般用于检测请求是否被篡改
+</code></pre>
+<h3 id="GET与POST区别"><a href="#GET与POST区别" class="headerlink" title="GET与POST区别"></a>GET与POST区别</h3><pre><code>1.功能：
+	GET用于从服务器获取资源
+	POST用来更新服务器的资源
+2.幂等性：GET是幂等的，POST是非幂等的
+3.安全性：
+	GET请求参数会明文附加在URL之后
+	POST请求数据会封装到请求体中，相对安全
+4.传输数据量的大小：
+	GET请求允许发送的数据量较小，大多数浏览器会限制请求URL长度在2048个字节，大多数服务器最多处理64k大小的URL
+	POST没有大小限制
+5.参数的数据类型：
+	GET只接受ASCII字符
+	POST无限制
+6.GET在浏览器回退时是无害的，而POST会再次请求
+7.GET请求可以被缓存，保留在浏览器的历史记录中；POST请求则相反
+</code></pre>
+<h3 id="HTTP报文分析"><a href="#HTTP报文分析" class="headerlink" title="HTTP报文分析"></a>HTTP报文分析</h3><pre><code>HTTP报文由请求行，首部，实体主体组成，他们之间由”回车换行符“分隔开。实体也包括首部和实体主体。
+图片: Snipaste_2025-04-25_16-33-46.png HTTP请求报文格式
+
+请求行和首部是由ASCII文本组成，实体主体可选，可以为空也可以是任意二进制数据。
+
+1.请求与响应报文格式
+请求报文格式
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;method&gt;&lt;request-URL&gt;&lt;version&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure>
+
+响应报文格式
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;version&gt;&lt;status&gt;&lt;reason-phrase&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure>
+
+2.一个请求或响应报文的组成
+·请求方法，客户端希望服务器对资源执行的动作
+·请求URL，命名了所请求的资源
+·协议版本，报文所使用的HTTP版本
+·状态码，这三个数字描述了请求过程中所发生的情况
+·原因短语，数字状态码的可读版本
+·首部，可以有零个或多个首部
+·实体的主题部分，可以为空也可以包含任意二进制数据
+</code></pre>
+<h2 id="cookie与session区别"><a href="#cookie与session区别" class="headerlink" title="cookie与session区别"></a>cookie与session区别</h2><pre><code>HTTP协议是无状态协议，自身不对请求和响应直接的通信状态进行保存，但有些场景需要保存用户的登录信息，因此引入cookie和session
+【cookie】:cookie是一小段文本信息，客户端请求服务器时，如果服务器需要记录该用户状态，需要在响应头中给客户端浏览器颁发一个cookie，浏览器保存该cookie。当下次请求时，浏览器把请求的网站连同该cookie一起提交给服务器，服务器检查该cookie，以辨认用户状态
+【session】：当客户端请求服务器时，都会带上cookie，cookie里面一般会有一个JSESSIONID，服务器会根据JSESSIONID找到对应的session。如果客户端请求不包含JSESSIONID，则为该客户端创建session并生成相关联的JSESSIONID，并将JSESSIONID在本次响应中返回给客户端保存。
+客户端保存JSESSIONID的方式可以使用cookie机制，若浏览器禁用cookie，可以通过URL重写机制将JSESSIONID传回服务器
+</code></pre>
+<h3 id="保存位置与安全性"><a href="#保存位置与安全性" class="headerlink" title="保存位置与安全性"></a>保存位置与安全性</h3><pre><code>1.cookie保存在客户端，session保存在服务端
+2.cookie存在安全隐患，可以通过拦截或本地文件找到cookie后进行攻击，而session相对更加安全
+总结：可将登录信息等重要信息存放在session中，其他信息需要保留，可以存放在cookie中
+</code></pre>
+<h3 id="存储容量"><a href="#存储容量" class="headerlink" title="存储容量"></a>存储容量</h3><pre><code>1.单个cookie最大只允许4KB，一个站点最多保存20个
+2.session无大小限制，个数与服务器内存大小有关
+</code></pre>
+<h3 id="有效期与实现机制"><a href="#有效期与实现机制" class="headerlink" title="有效期与实现机制"></a>有效期与实现机制</h3><pre><code>1.cookie可以长期有效存在
+2.session依赖于cookie，过期时间默认-1，只需要关闭窗口该session就会失效。每个客户端对应一个session，并相互独立
+</code></pre>
+<h3 id="输入网址到获得页面的过程"><a href="#输入网址到获得页面的过程" class="headerlink" title="输入网址到获得页面的过程"></a>输入网址到获得页面的过程</h3><pre><code>详情参考：https://zhuanlan.zhihu.com/p/616202212
+1. 解析url，获取url中包含的域名。
+2. 通过DNS系统查询域名对应的IP。
+图片：Snipaste_2025-04-25_17-29-22.png
+3. 通过DNS系统查询域名对应的IP的具体步骤：
+</code></pre>
+<p>① 操作系统先查本地 hosts文件 中是否有记录，如果有，则直接返回相对应映射的IP地址。</p>
+<p>② 如果本地hosts文件中没有配置，则主机向自己的本地 DNS 服务器 发送查询报文，如果本地DNS服务器缓存中有，将直接返回结果。</p>
+<p>③ 如果本地服务器缓存中没有，则从内置在内部的根服务器列表（全球13台，固定的IP地址）中选一个发送查询报文。</p>
+<p>④ 根服务器解析域名中的后缀名，告诉本地服务器负责该后缀名的所有顶级服务器列表。</p>
+<p>⑤ 本地服务器选择其中一个顶级域服务器发送查询请求，顶级域服务器拿到域名后继续解析，返回对应域的所有权威服务器列表。</p>
+<p>⑥ 本地服务器再向返回的权威服务器发送查询报文，最终会从某一个权威服务器上得到具体的 IP 地址。</p>
+<p>⑦ 主机返回结果IP。</p>
+<pre><code>3. 浏览器得到域名对应的IP地址之后，向服务器发起三次握手请求简历TCP连接。
+
+4. TCP连接建立起来后，浏览器向服务器发送HTTP请求，如果HTML文件在缓存中，浏览器则直接返回，如果没有，就去后台拿。
+</code></pre>
+<p>① 浏览器首次加载资源成功时，服务器返回200，此时浏览器不仅将资源下载下来，而且把response的header(里面的date属性非常重要，用来计算第二次相同资源时当前时间和date的时间差)一并缓存。</p>
+<p>② 下一次加载资源时，首先要经过强缓存的处理，cache-control的优先级最高，比如cache-control：no-cache,就直接进入到协商缓存的步骤了，如果cache-control：max-age&#x3D;xxx,就会先比较当前时间和上一次返回200时的时间差，如果没有超过max-age，命中强缓存，不发请求直接从本地缓存读取该文件（这里需要注意，如果没有cache-control，会取expires的值，来对比是否过期），过期的话会进入下一个阶段，协商缓存。</p>
+<p>③ 协商缓存阶段，则向服务器发送header带有If-None-Match和If-Modified-Since的请求，服务器会比较Etag，如果相同，命中协商缓存，返回304；如果不一致则有改动，直接返回新的资源文件带上新的Etag值并返回200。</p>
+<p>④ 协商缓存第二个重要的字段是，If-Modified-Since，如果客户端发送的If-Modified-Since的值跟服务器端获取的文件最近改动的时间，一致则命中协商缓存，返回304；不一致则返回新的last-modified和文件并返回200。</p>
+<pre><code>5. 服务器接收到请求后，根据路径参数映射到特定的处理器进行处理，并将处理结果以及响应的视图返回给浏览器。
+
+6. 浏览器解析视图，并根据请求到的资源、数据进行渲染页面，最终向用户呈现一个完整的页面。构建DOM树(DOM tree)：从上到下解析HTML文档生成DOM节点树（DOM tree），也叫内容树（content tree）。
+</code></pre>
+<p>构建CSSOM(CSS Object Model)树：加载解析样式生成CSSOM树。<br>执行JavaScript：加载并执行JavaScript代码（包括内联代码或外联JavaScript文件）。<br>构建渲染树(render tree)：根据DOM树和CSSOM树,生成渲染树(render tree)。<br>渲染树：按顺序展示在屏幕上的一系列矩形，这些矩形带有字体，颜色和尺寸等视觉属性。<br>布局（layout）：根据渲染树将节点树的每一个节点布局在屏幕上的正确位置。<br>绘制（painting）：遍历渲染树绘制所有节点，为每一个节点适用对应的样式，这一过程是通过UI后端模块完成。</p>
+<h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><pre><code>HTTPS是以安全为目标的HTTP通道，即HTTP加入SSL层，HTTPS并非绝对安全，但相对安全，并大幅增加中间人攻击成本
+作用：
+1.建立一个信息安全通道，来保证数据传输的安全
+2.确认网站的真实性
+</code></pre>
+<h3 id="HTTPS加密过程"><a href="#HTTPS加密过程" class="headerlink" title="HTTPS加密过程"></a>HTTPS加密过程</h3><pre><code>1. 客户端向服务端发起第一次握手请求，告诉服务端客户端所支持的SSL的指定版本、加密算法及密钥长度等信息。
+2. 服务端将自己的公钥发给数字证书认证机构，数字证书认证机构利用自己的私钥对服务器的公钥进行数字签名，并给服务器颁发公钥证书。
+3. 服务端将证书发给客户端。
+4. 客服端利用数字认证机构的公钥，向数字证书认证机构验证公钥证书上的数字签名，确认服务器公开密钥的真实性。
+5. 客户端使用服务端的公开密钥加密自己生成的对称密钥，发给服务端。
+6. 服务端收到后利用私钥解密信息，获得客户端发来的对称密钥。
+7. 通信双方可用对称密钥来加密解密信息。
+图片：Snipaste_2025-04-25_17-34-46.png
+图片：Snipaste_2025-04-25_17-35-20.png
+</code></pre>
+<h3 id="CA证书的申请及使用过程"><a href="#CA证书的申请及使用过程" class="headerlink" title="CA证书的申请及使用过程"></a>CA证书的申请及使用过程</h3><pre><code>1. 对称加密与非对称加密
+【对称加密】：指加密和解密使用同一密钥，常见的对称加密算法有DES、AES
+优点：运算速度快
+缺点：密钥如何安全传输
+【非对称加密】：加密和解密使用不同的密钥，一把公开的公钥，一把私有的私钥。公钥加密的信息只有私钥才能解密，私钥加密的信息只有公钥才能解密。常见的非对称加密算法：RSA、DSA、ECC
+优点：私钥泄露风险降低，公钥加密信息只有私钥才能解开，较大程度保证信息的来源性、准确性、完整性
+缺点：运算速度慢，比较耗费系统资源；公钥是公开的，中间人可以篡改客户端公钥或客户端发送给服务端的信息
+2. CA签发证书
+图片：Snipaste_2025-04-25_17-54-29.png
+【CA签发流程】
+·CA会把持有者的公钥、用途、颁发者、有效时间等信息打成一个包，然后对这些信息进行Hash计算，得到一个Hash值
+·CA会使用自己的私钥将该Hash值加密，生成Certificate Signature，也就是CA对证书做了签名
+·最后将Certificate Signature添加在文件证书上，形成数字证书
+【客户端校验服务端的数字证书的过程】
+·首先客户端使用同样的Hash算法获取证书的Hash值h1
+·通常浏览器和操作系统中集成了CA的公钥信息，浏览器收到证书后可使用CA的公钥解密Certificate Signature内容，得到Hash值h2
+·比较h1和h2，如果值相同则为可信赖证书，否则不可信
+3.SSL与TLS
+【SSL(Secure Socket Layer，安全套接字层)】
+位置：位于可靠的面向连接的网络层协议和应用层协议之间的一种协议层
+作用：SSL通过互相认证、使用数字签名确保完整性、使用加密确保私密性，以实现客户端和服务器之前的安全通讯
+组成：SSL记录协议和SSL握手协议
+【TLS(Transport Layer Security,传输层安全协议)】
+位置：HTTP与TCP协议之间的一层，通常发生在TCP三次握手之后，先进行TLS四次握手，再进行HTTP通信
+作用：用于两个应用程序之间提供保密性和数据完整性
+组成：TLS记录协议和TLS握手协议
+4.HTTPS涉及的计算环节
+【非对称密钥交换】根据客户端和服务端不对称的信息，经过高强度的密钥生成算法，生成对称密钥，用于加解密后续应用消息
+【对称加解密】服务端和客户端使用相同的密钥进行信息的加解密
+【消息一致性验证】每段加密的内容回附加一个MAC信息，即消息认证码，简单地说对内容进行的安全哈希计算，接收方需要校验MAC码
+【证书签名校验】客户端验证服务端证书身份，对签名进行校验，确保证书真实性
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">jingli</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/04/25/http/">http://example.com/2025/04/25/http/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">jingli's blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/04/22/TCP%E4%B8%8EUDP/" title="TCP与UDP"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">TCP与UDP</div></div><div class="info-2"><div class="info-item-1">TCP (传输控制协议，Transmission Control Protocol)基本特性面向连接（三次握手）、可靠传输（确认、重传、排序）保证数据按序到达有流量控制（滑动窗口）、拥塞控制（慢启动、拥塞避免、快重传、快恢复）头部较大（20~60字节）传输效率低（因控制机制复杂）不支持多播 适用场景要求可靠性的应用，如HTTP&#x2F;HTTPS(网页)、FTP(文件传输)、SMTP(邮件)、SSH(远程登录)、数据库(MySQL) 三次握手，四次挥手三次握手 1. 客户端主动打开，服务器被动打开进入Listen阶段，客户端向服务端发送请求建立连接请求包（SYN=1，Seq=x），客户端进入SYN-SENT阶段 2. 服务端接收到客户端请求建立连接，向客户端发送确认建立连接包（SYN=1，ACK=1，seq=y，ack=x+1），服务端进入SYN-RECV阶段 3. 客户端接到服务端的确认建立连接包，向服务端发送确认包（ACK=1，seq=x+1，ack=y+1）,客户端进入ESTAB-LISHED阶段，服务端接收到确认包后也进入ESTAB-LISHED阶段  四次挥手 1....</div></div></div></a><a class="pagination-related" href="/2025/04/28/C++/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">智能指针是C++中用于自动管理动态分配内存的类模板，帮助防止内存泄露，并在适当的时候自动释放内存，  unique_ptr独占所有权的智能指针，同一时间只能有一个unique_ptr指向特定对象 特点： 1.不可复制，但可移动 2，离开作用域时自动释放内存 3.零额外开销（与原始指针大小相同） 使用场景： 1.独占资源所有权 2.工厂函数返回指针 3.作为类的成员变量，表示独占关系  shared_ptr共享所有权的智能指针，多个shared_ptr可以指向同一对象，使用引用计数管理 特点： 1.可以复制和移动 2.引用计数为零时自动释放内存 3.有少量额外开销（控制块） 使用场景： 1.共享资源所有权 2.需要多个对象访问同一资源 3.缓存系统  weak_ptr弱引用计数，不增加引用计数，用于解决shared_ptr的循坏引用问题 特点： 1.不增加引用计数 2.必须从shared_ptr创建...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">jingli</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#http-%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.</span> <span class="toc-text">http(超文本传输协议)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8D%E7%A7%B0%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.2.</span> <span class="toc-text">名称详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.2.1.</span> <span class="toc-text">协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93"><span class="toc-number">1.2.2.</span> <span class="toc-text">传输</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B6%85%E6%96%87%E6%9C%AC"><span class="toc-number">1.2.3.</span> <span class="toc-text">超文本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.2.4.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">发展历程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#http-0-9"><span class="toc-number">1.3.1.</span> <span class="toc-text">http&#x2F;0.9</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http-1-0"><span class="toc-number">1.3.2.</span> <span class="toc-text">http&#x2F;1.0</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http-1-1"><span class="toc-number">1.3.3.</span> <span class="toc-text">http&#x2F;1.1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http2"><span class="toc-number">1.3.4.</span> <span class="toc-text">http2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http3"><span class="toc-number">1.3.5.</span> <span class="toc-text">http3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http-1-0%E4%B8%8Ehttp-1-1%E5%8C%BA%E5%88%AB"><span class="toc-number">1.4.</span> <span class="toc-text">http&#x2F;1.0与http&#x2F;1.1区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%BF%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.4.1.</span> <span class="toc-text">长连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%93%E5%AD%98%E5%A4%84%E7%90%86"><span class="toc-number">1.4.2.</span> <span class="toc-text">缓存处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E7%A0%81"><span class="toc-number">1.4.3.</span> <span class="toc-text">错误码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HOST%E5%9F%9F"><span class="toc-number">1.4.4.</span> <span class="toc-text">HOST域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%A6%E5%AE%BD%E4%BC%98%E5%8C%96%E5%8F%8A%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E4%BD%BF%E7%94%A8"><span class="toc-number">1.4.5.</span> <span class="toc-text">带宽优化及网络连接使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-x%E4%B8%8EHTTP-2%E5%8C%BA%E5%88%AB"><span class="toc-number">1.5.</span> <span class="toc-text">HTTP 1.x与HTTP 2区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E7%9A%84%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.5.1.</span> <span class="toc-text">新的二进制格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">多路复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#header%E5%8E%8B%E7%BC%A9"><span class="toc-number">1.5.3.</span> <span class="toc-text">header压缩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%8E%A8%E9%80%81"><span class="toc-number">1.5.4.</span> <span class="toc-text">服务端推送</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">1.6.</span> <span class="toc-text">HTTP状态码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1xx"><span class="toc-number">1.6.1.</span> <span class="toc-text">1xx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2xx"><span class="toc-number">1.6.2.</span> <span class="toc-text">2xx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3XX"><span class="toc-number">1.6.3.</span> <span class="toc-text">3XX</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4xx"><span class="toc-number">1.6.4.</span> <span class="toc-text">4xx</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5xx"><span class="toc-number">1.6.5.</span> <span class="toc-text">5xx</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E5%BB%BA%E7%AB%8B%E5%92%8C%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.7.</span> <span class="toc-text">HTTP建立和断开连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.7.1.</span> <span class="toc-text">建立连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%AD%E5%BC%80%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.7.2.</span> <span class="toc-text">断开连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP%E7%9A%84%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94"><span class="toc-number">1.8.</span> <span class="toc-text">HTTP的请求与响应</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E5%B8%B8%E8%A7%81%E8%AF%B7%E6%B1%82%E6%96%B9%E5%BC%8F"><span class="toc-number">1.8.1.</span> <span class="toc-text">HTTP常见请求方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GET%E4%B8%8EPOST%E5%8C%BA%E5%88%AB"><span class="toc-number">1.8.2.</span> <span class="toc-text">GET与POST区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP%E6%8A%A5%E6%96%87%E5%88%86%E6%9E%90"><span class="toc-number">1.8.3.</span> <span class="toc-text">HTTP报文分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie%E4%B8%8Esession%E5%8C%BA%E5%88%AB"><span class="toc-number">1.9.</span> <span class="toc-text">cookie与session区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E4%BD%8D%E7%BD%AE%E4%B8%8E%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">1.9.1.</span> <span class="toc-text">保存位置与安全性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%AE%B9%E9%87%8F"><span class="toc-number">1.9.2.</span> <span class="toc-text">存储容量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E6%95%88%E6%9C%9F%E4%B8%8E%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6"><span class="toc-number">1.9.3.</span> <span class="toc-text">有效期与实现机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%93%E5%85%A5%E7%BD%91%E5%9D%80%E5%88%B0%E8%8E%B7%E5%BE%97%E9%A1%B5%E9%9D%A2%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-number">1.9.4.</span> <span class="toc-text">输入网址到获得页面的过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS"><span class="toc-number">1.10.</span> <span class="toc-text">HTTPS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0-1"><span class="toc-number">1.10.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTPS%E5%8A%A0%E5%AF%86%E8%BF%87%E7%A8%8B"><span class="toc-number">1.10.2.</span> <span class="toc-text">HTTPS加密过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CA%E8%AF%81%E4%B9%A6%E7%9A%84%E7%94%B3%E8%AF%B7%E5%8F%8A%E4%BD%BF%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.10.3.</span> <span class="toc-text">CA证书的申请及使用过程</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" title="排序算法">排序算法</a><time datetime="2025-05-20T05:17:03.144Z" title="发表于 2025-05-20 13:17:03">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F(1)/" title="设计模式">设计模式</a><time datetime="2025-05-20T03:08:11.952Z" title="发表于 2025-05-20 11:08:11">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构">数据结构</a><time datetime="2025-05-20T02:07:39.986Z" title="发表于 2025-05-20 10:07:39">2025-05-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/15/UML%E7%B1%BB%E5%9B%BE/" title="UML类图">UML类图</a><time datetime="2025-05-15T04:15:55.955Z" title="发表于 2025-05-15 12:15:55">2025-05-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/06/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="无标题">无标题</a><time datetime="2025-05-06T02:00:40.335Z" title="发表于 2025-05-06 10:00:40">2025-05-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By jingli</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
